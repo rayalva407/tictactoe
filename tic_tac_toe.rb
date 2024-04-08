@@ -1,7 +1,38 @@
-class TicTacToe
-  def initialize
-    @board = Array.new(3) { Array.new(3, " ") }
-    @current_player = "X"
+ class TicTacToe
+    def initialize
+      @board = Array.new(3) { Array.new(3, " ") }
+      @player1 = Player.new("Player 1", "X")
+      @player2 = Player.new("Player 2", "O")
+      @current_player = @player1
+    end
+
+    def play
+      loop do
+        print_board
+        puts "#{@current_player.name}, enter your move (row [0-2], column [0-2]):"
+        row, col = gets.chomp.split.map(&:to_i)
+        if @board[row][col] == " "
+          @board[row][col] = @current_player.symbol
+          if winner?
+            print_board
+            puts "#{@current_player.name} wins!"
+            break
+          end
+          if draw?
+            print_board
+            puts "It's a draw!"
+            break
+          end
+          switch_player
+        else
+          puts "Invalid move, try again."
+        end
+      end
+    end
+
+    def switch_player
+      @current_player = @current_player == @player1 ? @player2 : @player1
+    end
   end
 
   def print_board
@@ -55,4 +86,3 @@ class TicTacToe
   def switch_player
     @current_player = @current_player == "X" ? "O" : "X"
   end
-end
